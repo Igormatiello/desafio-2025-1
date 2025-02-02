@@ -45,4 +45,14 @@ public class Pessoa {
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfessorCurso> cursosLecionados = List.of();
+
+    // Construtor com os parâmetros necessários
+    public Pessoa(String cpf, Boolean ativo, User user, String nome, String email, String telefone) {
+        this.cpf = cpf;
+        this.ativo = ativo;
+        this.user = user;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+    }
 }

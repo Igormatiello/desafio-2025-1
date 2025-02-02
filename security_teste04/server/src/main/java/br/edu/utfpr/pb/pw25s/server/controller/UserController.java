@@ -4,8 +4,8 @@ import br.edu.utfpr.pb.pw25s.server.dto.CreatePessoaDTO;
 import br.edu.utfpr.pb.pw25s.server.model.Pessoa;
 import br.edu.utfpr.pb.pw25s.server.model.User;
 import br.edu.utfpr.pb.pw25s.server.repository.UserRepository;
-import br.edu.utfpr.pb.pw25s.server.service.IPessoaService;
 import br.edu.utfpr.pb.pw25s.server.service.UserService;
+import br.edu.utfpr.pb.pw25s.server.service.impl.PessoaServiceImpl;
 import br.edu.utfpr.pb.pw25s.server.shared.GenericResponse;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private final IPessoaService pessoaService;
+    private final PessoaServiceImpl pessoaService;
 
 
     private final UserRepository userRepository;
@@ -29,44 +29,28 @@ public class UserController {
 
 
 
-    public UserController(UserService userService, IPessoaService pessoaService, UserRepository userRepository) {
+    public UserController(UserService userService, PessoaServiceImpl pessoaService, UserRepository userRepository) {
         this.userService = userService;
         this.pessoaService = pessoaService;
         this.userRepository = userRepository;
 
-    }
-
-    @PostMapping
-    public GenericResponse createUser(@Valid @RequestBody CreatePessoaDTO createPessoaDTO) {
-
-        // Criação do usuário
-        GoogleAuthenticator gAuth = new GoogleAuthenticator();
-        GoogleAuthenticatorKey key = gAuth.createCredentials();
-
-        User user = User.builder()
-                .username(createPessoaDTO.getUsername())
-                .password(createPessoaDTO.getPassword())  // Lembre-se de aplicar hash na senha antes de salvar!
-                .displayName(createPessoaDTO.getNome())   // Exibindo o nome no campo displayName
-                .secret(key.getKey())
-                .build();
-
-        userService.save(user);  // Salva o usuário
-
-        // Criação da pessoa
-        Pessoa pessoa = Pessoa.builder()
-                .cpf(createPessoaDTO.getCpf())
-                .ativo(createPessoaDTO.getAtivo())
-                .user(user)  // Associa o usuário recém-criado
-                .nome(createPessoaDTO.getNome())
-                .email(createPessoaDTO.getEmail())
-                .telefone(createPessoaDTO.getTelefone())
-                .build();
-
-        pessoaService.save(pessoa);  // Salva a pessoa
-
+    }@PostMapping
+    public GenericResponse createUser(@RequestBody CreatePessoaDTO createPessoaDTO) {
+        userService.createUser(createPessoaDTO);
         return GenericResponse.builder().message("User and person saved.").build();
     }
 
+    @PutMapping("/edit")
+    public GenericResponse editUserAndPessoa(@RequestBody CreatePessoaDTO createPessoaDTO) {
+        userService.editUserAndPessoa(createPessoaDTO);
+        return GenericResponse.builder().message("User and person updated.").build();
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<GenericResponse> getUserProfile() {
+        var userProfile = userService.getUserProfile(); // Supondo que esse método retorne o perfil do usuário.
+        return ResponseEntity.ok(new GenericResponse("User and person found.", userProfile));
+    }
 
 
     @GetMapping("/validateToken")

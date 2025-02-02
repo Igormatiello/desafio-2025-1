@@ -50,6 +50,12 @@ public class User implements UserDetails {
         return AuthorityUtils.createAuthorityList("ROLE_USER");
     }
 
+    public User(String username, String password, String displayName) {
+        this.username = username;
+        this.password = password;
+        this.displayName = displayName;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

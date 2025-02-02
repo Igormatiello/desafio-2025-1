@@ -1,7 +1,12 @@
 package br.edu.utfpr.pb.pw25s.server.service;
 
+import br.edu.utfpr.pb.pw25s.server.dto.CreatePessoaDTO;
+import br.edu.utfpr.pb.pw25s.server.model.Pessoa;
 import br.edu.utfpr.pb.pw25s.server.model.User;
 import br.edu.utfpr.pb.pw25s.server.repository.UserRepository;
+import br.edu.utfpr.pb.pw25s.server.service.impl.PessoaServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
@@ -18,7 +23,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository ) {
+    // Usando @Lazy para evitar ciclo de dependência
+    @Autowired
+    @Lazy
+    private PessoaServiceImpl pessoaService;
+
+    public UserService(UserRepository userRepository) {
 
         this.userRepository = userRepository;
 
@@ -31,52 +41,42 @@ public class UserService {
         return userRepository.save(user);
     }
 
-public boolean enviaEmail(String codigo){
+    public void createUser(CreatePessoaDTO createPessoaDTO) {
+        User user = new User(createPessoaDTO.getUsername(), bCryptPasswordEncoder.encode(createPessoaDTO.getPassword()), createPessoaDTO.getNome());
+        userRepository.save(user);
 
-
-
-    String remetente = "testeseg12@yahoo.com";
-    String senha = "#S/X?hM)&yug4N@";
-    String destinatario = "igormatiello1122@gmail.com";
-    String assunto = "Assunto do e-mail";
-    String conteudo = "Seu codigo é " + codigo;
-
-    Properties props = new Properties();
-    /*props.put("mail.smtp.host", "smtp.gmail.com");
-    props.put("mail.smtp.port", "587");
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.starttls.enable", "true");
-*/
-    props.put("mail.smtp.host", "smtp.mail.yahoo.com");
-    props.put("mail.smtp.port", "587"); // Use a porta 465 ou 587
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.starttls.enable", "true"); // Ative o TLS/SSL
-
-    Session session = Session.getInstance(props, new Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(remetente, senha);
-        }
-    });
-
-    try {
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(remetente));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-        message.setSubject(assunto);
-        message.setText(conteudo);
-
-        Transport.send(message);
-        System.out.println("E-mail enviado com sucesso!");
-    } catch (MessagingException e) {
-        e.printStackTrace();
-        System.out.println("Erro ao enviar o e-mail.");
-        return false;
+        Pessoa pessoa = new Pessoa(createPessoaDTO.getCpf(), createPessoaDTO.getAtivo(), user, createPessoaDTO.getNome(), createPessoaDTO.getEmail(), createPessoaDTO.getTelefone());
+        pessoaService.save(pessoa);
     }
-    return true;
-}
 
-//PC3HXRA2719Z95GVVEE5XFF9
-    //codigo twilio
+    public void editUserAndPessoa(CreatePessoaDTO createPessoaDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+
+        user.setUsername(createPessoaDTO.getUsername());
+        user.setPassword(bCryptPasswordEncoder.encode(createPessoaDTO.getPassword()));
+        user.setDisplayName(createPessoaDTO.getNome());
+        userRepository.save(user);
+
+        Pessoa pessoa = pessoaService.findByUser(user).orElseThrow(() -> new RuntimeException("Pessoa not found"));
+        pessoa.setCpf(createPessoaDTO.getCpf());
+        pessoa.setAtivo(createPessoaDTO.getAtivo());
+        pessoa.setNome(createPessoaDTO.getNome());
+        pessoa.setEmail(createPessoaDTO.getEmail());
+        pessoa.setTelefone(createPessoaDTO.getTelefone());
+        pessoaService.save(pessoa);
+    }
+
+    public Object getUserProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        Pessoa pessoa = pessoaService.findByUser(user).orElseThrow(() -> new RuntimeException("Pessoa not found"));
+        return new Object[]{user, pessoa};
+    }
+
+
 
 
     public User getUserDoToken() {

@@ -1,6 +1,5 @@
 package br.edu.utfpr.pb.pw25s.server.service.impl;
 
-import br.edu.utfpr.pb.pw25s.server.service.ICrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -9,74 +8,68 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class CrudServiceImpl<T, ID extends Serializable>
-        implements ICrudService<T, ID> {
+public abstract class CrudServiceImpl<T, ID extends Serializable> {
 
     protected abstract JpaRepository<T, ID> getRepository();
 
-    @Override
     public List<T> findAll() {
         return getRepository().findAll();
     }
 
-    @Override
     public List<T> findAll(Sort sort) {
         return getRepository().findAll(sort);
     }
 
-    @Override
     public Page<T> findAll(Pageable pageable) {
         return getRepository().findAll(pageable);
     }
 
-    @Override
+    @Transactional
     public T save(T entity) {
         return getRepository().save(entity);
     }
 
-    @Override
+    @Transactional
     public T saveAndFlush(T entity) {
         return getRepository().saveAndFlush(entity);
     }
 
-    @Override
-    public Iterable<T> save(Iterable<T> iterable) {
-        return getRepository().saveAll(iterable);
+    @Transactional
+    public List<T> saveAll(Iterable<T> entities) {
+        return getRepository().saveAll(entities);
     }
 
-    @Override
-    public void flush() {
-        getRepository().flush();
+    public Optional<T> findById(ID id) {
+        return getRepository().findById(id);
     }
 
-    @Override
-    public T findOne(ID id) {
-        return getRepository().findById(id).orElse(null);
-    }
-
-    @Override
-    public boolean exists(ID id) {
+    public boolean existsById(ID id) {
         return getRepository().existsById(id);
     }
 
-    @Override
     @Transactional(readOnly = true)
     public long count() {
         return getRepository().count();
     }
 
-    @Override
-    public void delete(ID id) {
+    @Transactional
+    public void deleteById(ID id) {
         getRepository().deleteById(id);
     }
 
-    @Override
-    public void delete(Iterable<? extends T> iterable) {
-        getRepository().deleteAll(iterable);
+    @Transactional
+    public void delete(T entity) {
+        getRepository().delete(entity);
     }
 
-    @Override
+    @Transactional
+    public void deleteAll(Iterable<? extends T> entities) {
+        getRepository().deleteAll(entities);
+    }
+
+    @Transactional
     public void deleteAll() {
         getRepository().deleteAll();
     }

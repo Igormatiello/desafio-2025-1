@@ -1,6 +1,6 @@
 package br.edu.utfpr.pb.pw25s.server.controller;
 
-import br.edu.utfpr.pb.pw25s.server.service.ICrudService;
+import br.edu.utfpr.pb.pw25s.server.service.impl.CrudServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,12 +13,13 @@ import jakarta.validation.Valid;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 // T = class type, D = dto type, ID = attribute related to primary key type
 public abstract class CrudController<T, D, ID extends Serializable> {
 
-    protected abstract ICrudService<T, ID> getService();
+    protected abstract CrudServiceImpl<T, ID> getService();
 
     protected abstract ModelMapper getModelMapper();
 
@@ -66,13 +67,14 @@ public abstract class CrudController<T, D, ID extends Serializable> {
 
     @GetMapping("{id}")
     public ResponseEntity<D> findOne(@PathVariable ID id) {
-        T entity = getService().findOne(id);
-        if (entity != null) {
-            return ResponseEntity.ok(convertToDto(entity));
+        Optional<T> optionalEntity = getService().findById(id);
+        if (optionalEntity.isPresent()) {
+            return ResponseEntity.ok(convertToDto(optionalEntity.get()));
         } else {
             return ResponseEntity.noContent().build();
         }
     }
+
 
     @PostMapping
     public ResponseEntity<D> create(@RequestBody @Valid D entity) {
@@ -88,20 +90,13 @@ public abstract class CrudController<T, D, ID extends Serializable> {
 
     }
 
-    @GetMapping("exists/{id}")
-    public ResponseEntity<Boolean> exists(@PathVariable ID id) {
-        return ResponseEntity.ok(getService().exists(id));
-    }
+
 
     @GetMapping("count")
     public ResponseEntity<Long> count() {
         return ResponseEntity.ok(getService().count());
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable ID id) {
-        getService().delete(id);
-        return ResponseEntity.noContent().build();
-    }
+
 
 }
