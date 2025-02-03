@@ -41,11 +41,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             // Validate TOTP
             GoogleAuthenticator gAuth = new GoogleAuthenticator();
-            if (!user.getSecret().equals(loginRequest.getTotp())) {
+            /*if (!user.getSecret().equals(loginRequest.getTotp())) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid TOTP");
                 return null;
-            }
+            }*/
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

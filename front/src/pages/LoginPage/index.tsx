@@ -9,9 +9,8 @@ import Notification from '@/components/Notification';
 export function LoginPage() {
   const [form, setForm] = useState({
     username: '',
-    password: '',
-    totp: ''  
-  });
+    password: ''
+    });
   const [pendingApiCall, setPendingApiCall] = useState(false);
   const [apiError, setApiError] = useState('');
   const [apiSuccess, setApiSuccess] = useState('');
@@ -31,8 +30,7 @@ export function LoginPage() {
   const onClickLogin = async () => {
     const login: IUserLogin = {
       username: form.username,
-      password: form.password,
-      totp: form.totp 
+      password: form.password
     };
 
     setPendingApiCall(true);
@@ -84,16 +82,6 @@ export function LoginPage() {
               type="password"
               value={form.password}
               placeholder="******"
-              onChange={onChange}
-            />
-          </FormControl>
-          <FormControl id="totp" mb={4}> {}
-            <FormLabel>Informe seu código TOTP:</FormLabel>
-            <Input
-              name="totp"
-              type="text"
-              value={form.totp}
-              placeholder="Informe seu código TOTP"
               onChange={onChange}
             />
           </FormControl>

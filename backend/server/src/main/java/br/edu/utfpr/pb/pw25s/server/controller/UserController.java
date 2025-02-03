@@ -45,6 +45,13 @@ public class UserController {
         userService.editUserAndPessoa(createPessoaDTO);
         return GenericResponse.builder().message("User and person updated.").build();
     }
+    @GetMapping("/tipo")
+    public ResponseEntity<String> getTipoPessoa() {
+        String tipo = userService.getTipoDoUsuario();
+        return ResponseEntity.ok(tipo);
+    }
+
+
 
     @GetMapping("/profile")
     public ResponseEntity<GenericResponse> getUserProfile() {

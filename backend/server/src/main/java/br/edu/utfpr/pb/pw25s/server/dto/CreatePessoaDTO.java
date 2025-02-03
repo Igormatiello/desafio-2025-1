@@ -35,6 +35,10 @@ public class CreatePessoaDTO {
     private String telefone;
 
     @NotNull
+    @Size(min = 1, max = 1)
+    private String tipo;
+
+    @NotNull
     private Boolean ativo;
 
     @NotNull

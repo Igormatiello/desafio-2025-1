@@ -41,11 +41,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public String getTipoDoUsuario() {
+        // Obtém o usuário a partir do token
+          // Busca a Pessoa associada ao usuário
+        Pessoa pessoa = pessoaService.findByUser(getUserDoToken())
+                .orElseThrow(() -> new RuntimeException("Pessoa not found"));
+
+        // Retorna o tipo da pessoa (E ou P)
+        return pessoa.getTipo();
+    }
+
     public void createUser(CreatePessoaDTO createPessoaDTO) {
         User user = new User(createPessoaDTO.getUsername(), bCryptPasswordEncoder.encode(createPessoaDTO.getPassword()), createPessoaDTO.getNome());
         userRepository.save(user);
 
-        Pessoa pessoa = new Pessoa(createPessoaDTO.getCpf(), createPessoaDTO.getAtivo(), user, createPessoaDTO.getNome(), createPessoaDTO.getEmail(), createPessoaDTO.getTelefone());
+        Pessoa pessoa = new Pessoa(createPessoaDTO.getCpf(), createPessoaDTO.getAtivo(), user, createPessoaDTO.getNome(), createPessoaDTO.getEmail(), createPessoaDTO.getTelefone(), createPessoaDTO.getTipo());
         pessoaService.save(pessoa);
     }
 
@@ -56,7 +66,7 @@ public class UserService {
 
         user.setUsername(createPessoaDTO.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(createPessoaDTO.getPassword()));
-        user.setDisplayName(createPessoaDTO.getNome());
+        //user.setDisplayName(createPessoaDTO.getNome());
         userRepository.save(user);
 
         Pessoa pessoa = pessoaService.findByUser(user).orElseThrow(() -> new RuntimeException("Pessoa not found"));

@@ -37,6 +37,9 @@ public class Pessoa {
     @Column(nullable = false)
     private String telefone;
 
+    @Column(nullable = false)
+    private String tipo;
+
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
     private PessoaEndereco endereco;
 
@@ -47,12 +50,13 @@ public class Pessoa {
     private List<ProfessorCurso> cursosLecionados = List.of();
 
     // Construtor com os parâmetros necessários
-    public Pessoa(String cpf, Boolean ativo, User user, String nome, String email, String telefone) {
+    public Pessoa(String cpf, Boolean ativo, User user, String nome, String email, String telefone, String tipo) {
         this.cpf = cpf;
         this.ativo = ativo;
         this.user = user;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+        this.tipo = tipo;
     }
 }

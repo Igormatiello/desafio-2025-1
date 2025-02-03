@@ -31,9 +31,6 @@ public class User implements UserDetails {
     @Size(min = 4, max = 255)
     private String username;
 
-    @NotNull
-    @Size(min = 4, max = 255)
-    private String displayName;
 
     @NotNull
     @Size(min = 6)
@@ -43,7 +40,7 @@ public class User implements UserDetails {
 
 
 
-    private String secret;  // Secret key for TOTP
+    //private String secret;  // Secret key for TOTP
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,7 +50,6 @@ public class User implements UserDetails {
     public User(String username, String password, String displayName) {
         this.username = username;
         this.password = password;
-        this.displayName = displayName;
     }
 
     @Override

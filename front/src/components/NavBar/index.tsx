@@ -1,13 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import logo from "@/assets/img/2.png";
+import logo from "@/assets/img/logo.png";
 import AuthService from "@/service/AuthService";
-import OrderService from "@/service/OrderService";
 import { useEffect, useState } from "react";
 
 export function NavBar() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [uniqueProductCount, setUniqueProductCount] = useState<number>(0);
+  const [uniqueProductCount] = useState<number>(0);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -19,18 +18,10 @@ export function NavBar() {
 
   useEffect(() => {
 
-    const updateUniqueProductCount = () => {
-      const cart = OrderService.getCart();
-      const uniqueProducts = new Set(cart.map(item => item.product.id));
-      setUniqueProductCount(uniqueProducts.size);
-    };
-
-    updateUniqueProductCount();
   }, []);
 
   const onClickLogout = () => {
     AuthService.logout();
-    OrderService.clearCart(); // Limpa o carrinho ao deslogar
     navigate("/login");
   };
 
@@ -44,12 +35,12 @@ export function NavBar() {
           <ul className="navbar-nav me-auto mb-2 mb-md-0">
             <li className="nav-item">
               <NavLink
-                to="/products"
+                to="/cursos"
                 className={(navData) =>
                   navData.isActive ? "nav-link active" : "nav-link"
                 }
               >
-                Produtos
+                Cursos
               </NavLink>
             </li>
             <li className="nav-item">
