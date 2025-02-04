@@ -7,6 +7,9 @@ import CursosPage from "@/pages/CursosPage/ListagemCursosPage";
 import ListagemCursosSemProfessor from "@/pages/CursosPage/ListagemCursosSemProfessorPage";
 import MeusCursosProfessor from "@/pages/CursosPage/ListagemMeusCursosProfessorPage";
 import CursosEstudantePage from "@/pages/CursosPage/ListagemCursosEstudantePage";
+import MeusAlunosCursosProfessor from "@/pages/CursosPage/ListagemAlunosDoCursoPage";
+import MeusDadosUsuario from "@/pages/MeusDadosPage/DadosDeUserPessoaPage";
+import MeusEnderecos from "@/pages/MeusDadosPage/MeuEnderecoPage";
 
 export function BaseRoutes() {
   return (
@@ -22,6 +25,10 @@ export function BaseRoutes() {
         <Route path="/cursos_livres" element={<ListagemCursosSemProfessor />} />
         <Route path="/meus_cursos_professor" element={<MeusCursosProfessor />} />
         <Route path="/meus_cursos_estudante" element={<CursosEstudantePage />} />
+        <Route path="/alunos/:id" element={<MeusAlunosCursosProfessor />} />
+        <Route path="/meus_dados" element={<MeusDadosUsuario />} />
+        <Route path="/endereco" element={<MeusEnderecos />} />
+
 
         
 

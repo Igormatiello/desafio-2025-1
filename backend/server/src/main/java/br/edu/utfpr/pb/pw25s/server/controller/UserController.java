@@ -40,7 +40,7 @@ public class UserController {
         return GenericResponse.builder().message("User and person saved.").build();
     }
 
-    @PutMapping("/edit")
+    @PutMapping("/editar")
     public GenericResponse editUserAndPessoa(@RequestBody CreatePessoaDTO createPessoaDTO) {
         userService.editUserAndPessoa(createPessoaDTO);
         return GenericResponse.builder().message("User and person updated.").build();
@@ -53,12 +53,11 @@ public class UserController {
 
 
 
-    @GetMapping("/profile")
+    @GetMapping("/dados")
     public ResponseEntity<GenericResponse> getUserProfile() {
-        var userProfile = userService.getUserProfile(); // Supondo que esse método retorne o perfil do usuário.
+        CreatePessoaDTO userProfile = userService.getUserProfile();
         return ResponseEntity.ok(new GenericResponse("User and person found.", userProfile));
     }
-
 
     @GetMapping("/validateToken")
     public ResponseEntity<GenericResponse> validateToken() {

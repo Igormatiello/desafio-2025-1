@@ -78,14 +78,17 @@ public class UserService {
         pessoaService.save(pessoa);
     }
 
-    public Object getUserProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        Pessoa pessoa = pessoaService.findByUser(user).orElseThrow(() -> new RuntimeException("Pessoa not found"));
-        return new Object[]{user, pessoa};
-    }
+    public CreatePessoaDTO getUserProfile() {
+        // Obtém o usuário logado (exemplo fictício de método)
+        User user = userRepository.findByUsername(getUserDoToken().getUsername());
 
+        // Encontra a pessoa associada ao usuário
+        Pessoa pessoa = pessoaService.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Retorna o DTO com os dados do usuário e pessoa
+        return CreatePessoaDTO.fromUserAndPessoa(user, pessoa);
+    }
 
 
 

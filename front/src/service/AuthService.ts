@@ -1,6 +1,5 @@
 import { ICriarPessoaDTO, IUserLogin } from "@/commons/interfaces";
-
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { api } from "@/lib/axios";
 
 const fpPromise = FingerprintJS.load();
@@ -29,15 +28,15 @@ const login = async (user: IUserLogin): Promise<any> => {
 
   try {
     response = await api.post("/login", user, {
-      headers: { 'Fingerprint': fingerprint }
+      headers: { Fingerprint: fingerprint },
     });
 
     if (response.status === 200) {
-      setLocalStorage("token", response.data.token); // Armazenar o token no localStorage
-      setLocalStorage("fingerprint", fingerprint); // Armazenar o fingerprint no localStorage
+      setLocalStorage("token", response.data.token);
+      setLocalStorage("fingerprint", fingerprint);
       api.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
       api.defaults.headers.common["Fingerprint"] = fingerprint;
-      
+
       const tipoResponse = await api.get("/users/tipo");
       if (tipoResponse.status === 200) {
         setLocalStorage("tipo", tipoResponse.data);
@@ -59,7 +58,7 @@ const isAuthenticated = async (): Promise<boolean> => {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     api.defaults.headers.common["Fingerprint"] = currentFingerprint;
     try {
-      const response = await api.get('/users/validateToken');
+      const response = await api.get("/users/validateToken");
       if (response.status === 200) {
         return true;
       } else {
@@ -73,7 +72,6 @@ const isAuthenticated = async (): Promise<boolean> => {
       return false;
     }
   } else {
-    // Se o fingerprint não corresponder ou estiver ausente, limpar os dados
     removeLocalStorage("token");
     removeLocalStorage("fingerprint");
     return false;
@@ -90,6 +88,31 @@ const signup = async (user: ICriarPessoaDTO): Promise<any> => {
   return response;
 };
 
+const editUserAndPessoa = async (user: ICriarPessoaDTO): Promise<any> => {
+  let response;
+  try {
+    response = await api.put("/users/editar", user);
+  } catch (error: any) {
+    response = error.response;
+  }
+  return response;
+};
+
+const getUserProfile = async (): Promise<ICriarPessoaDTO | null> => {
+  let response;
+  try {
+    response = await api.get("/users/dados");
+    // Verifica se a resposta contém os dados no formato correto
+    if (response && response.data && response.data.data) {
+      return response.data.data; // Retorna os dados do usuário
+    }
+  } catch (error: any) {
+    console.error("Error fetching user profile:", error);
+    return null; // Retorna null em caso de erro
+  }
+  return null; // Retorna null se a resposta estiver mal formatada
+};
+
 const logout = (): void => {
   removeLocalStorage("token");
   removeLocalStorage("fingerprint");
@@ -102,6 +125,8 @@ const AuthService = {
   login,
   isAuthenticated,
   logout,
+  editUserAndPessoa,
+  getUserProfile,
 };
 
 export default AuthService;

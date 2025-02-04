@@ -32,9 +32,9 @@ import java.util.List;
         }
 
         @GetMapping("/enderecos")
-        public ResponseEntity<List<PessoaEndereco>> listarEnderecos() {
-            List<PessoaEndereco> enderecos = pessoaService.listarEnderecos();
-            return ResponseEntity.ok(enderecos);
+        public ResponseEntity<EnderecoDTO> listarEnderecos() {
+            EnderecoDTO endereco = pessoaService.listarEndereco();
+            return ResponseEntity.ok(endereco);
         }
     }
 

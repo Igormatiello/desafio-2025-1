@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaServiceImpl extends CrudServiceImpl<Pessoa, Long> {
@@ -127,12 +128,23 @@ public class PessoaServiceImpl extends CrudServiceImpl<Pessoa, Long> {
     }
 
 
-    public List<PessoaEndereco> listarEnderecos() {
+    public EnderecoDTO listarEndereco() {
+        // Busca a pessoa associada ao usuário do token
         Optional<Pessoa> pessoa = Optional.ofNullable(
                 repository.findByUserId(userService.getUserDoToken().getId())
         );
 
-        return pessoa.map(p -> enderecoRepository.findByPessoaId(p.getId()))
+        // Se a pessoa for encontrada, busca o primeiro endereço e converte para EnderecoDTO
+        return pessoa.map(p -> enderecoRepository.findByPessoaId(p.getId()).stream()
+                        .findFirst()  // Pega o primeiro endereço da lista
+                        .map(endereco -> EnderecoDTO.builder()
+                                .id(endereco.getId())
+                                .cidade(endereco.getCidade())
+                                .cep(endereco.getCep())
+                                .rua(endereco.getRua())
+                                .numero(endereco.getNumero())
+                                .build())
+                        .orElseThrow(() -> new RuntimeException("Nenhum endereço encontrado para esta pessoa.")))
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada."));
     }
 

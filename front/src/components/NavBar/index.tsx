@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 export function NavBar() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [uniqueProductCount] = useState<number>(0);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -76,66 +75,31 @@ export function NavBar() {
                 Meus Cursos E
               </NavLink>
             </li>
-            
             <li className="nav-item">
               <NavLink
-                to="/cart"
+                to="/meus_dados"
                 className={(navData) =>
                   navData.isActive ? "nav-link active" : "nav-link"
                 }
               >
-                <i className="bi bi-cart"></i> Carrinho
-                {uniqueProductCount > 0 && (
-                  <span className="badge bg-secondary rounded-pill">{uniqueProductCount}</span>
-                )}
+                Meus dados
               </NavLink>
             </li>
-            {isAuthenticated && (
-              <>
-                <li className="nav-item">
-                  <NavLink
-                    to="/address"
-                    className={(navData) =>
-                      navData.isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    Endereço
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    to="/orders"
-                    className={(navData) =>
-                      navData.isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    Meus Pedidos
-                  </NavLink>
-                </li>
-              </>
-            )}
-          </ul>
-          {!isAuthenticated && (
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <span className="nav-link">Olá visitante, faça seu </span>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/login" className="nav-link">
-                  <u>Login</u>
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <span className="nav-link">ou</span>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/signup" className="nav-link">
-                  <u>Cadastra-se</u>
-                </NavLink>
-              </li>
-            </ul>
-          )}
 
+            <li className="nav-item">
+              <NavLink
+                to="/endereco"
+                className={(navData) =>
+                  navData.isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Endereco
+              </NavLink>
+            </li>
+          
+          
+          </ul>
+        
           {isAuthenticated && (
             <NavLink to="/login" className="nav-link" onClick={onClickLogout}>
               Sair

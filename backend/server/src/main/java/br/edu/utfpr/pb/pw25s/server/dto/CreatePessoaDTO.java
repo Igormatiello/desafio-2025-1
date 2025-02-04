@@ -1,5 +1,7 @@
 package br.edu.utfpr.pb.pw25s.server.dto;
 
+import br.edu.utfpr.pb.pw25s.server.model.Pessoa;
+import br.edu.utfpr.pb.pw25s.server.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -44,4 +46,17 @@ public class CreatePessoaDTO {
     @NotNull
     @Size(min = 11, max = 11)
     private String cpf;
+
+    public static CreatePessoaDTO fromUserAndPessoa(User user, Pessoa pessoa) {
+        return new CreatePessoaDTO(
+                user.getUsername(),
+                user.getPassword(),
+                pessoa.getNome(),
+                pessoa.getEmail(),
+                pessoa.getTelefone(),
+                pessoa.getTipo(),
+                pessoa.getAtivo(),
+                pessoa.getCpf()
+        );
+    }
 }

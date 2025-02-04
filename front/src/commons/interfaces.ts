@@ -54,3 +54,16 @@ export interface IPessoa {
   tipo: string;
 }
 
+export interface EnderecoDTO {
+  id?: number; // O id pode ser opcional no front-end, caso esteja sendo gerado automaticamente no back-end
+  cidade: string;
+  cep: string;
+  rua: string;
+  numero: number;
+}
+
+export interface PessoaEndereco{
+  endereco: EnderecoDTO;
+  pessoa: IPessoa;
+}
+
