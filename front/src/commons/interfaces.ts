@@ -30,3 +30,27 @@ export interface ICurso {
   status: string;
 }
 
+export interface IEstudanteCurso {
+  id: number;
+  estudante: IPessoa;
+  curso: ICurso;
+}
+
+// Interface para ProfessorCurso
+export interface IProfessorCurso {
+  id: number;
+  professor: IPessoa;
+  curso: ICurso;
+}
+
+// Interface para Pessoa
+export interface IPessoa {
+  id: number;
+  cpf: string;
+  ativo: boolean;
+  nome: string;
+  email: string;
+  telefone: string;
+  tipo: string;
+}
+

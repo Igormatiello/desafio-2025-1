@@ -17,4 +17,8 @@ public interface EstudanteCursoRepository extends JpaRepository<EstudanteCurso, 
     @Query("SELECT ec FROM EstudanteCurso ec WHERE ec.curso.id = :cursoId AND ec.estudante.id = :estudanteId")
     Optional<EstudanteCurso> findByCursoIdAndEstudanteId(@Param("cursoId") Long cursoId, @Param("estudanteId") Long estudanteId);
 
+    // Pesquisa dos cursos associados ao estudante
+    @Query("SELECT ec.curso FROM EstudanteCurso ec WHERE ec.estudante.id = :estudanteId")
+    List<Curso> findCursosByEstudanteId(@Param("estudanteId") Long estudanteId);
+
 }

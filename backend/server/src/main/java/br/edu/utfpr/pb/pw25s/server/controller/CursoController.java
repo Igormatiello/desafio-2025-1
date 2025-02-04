@@ -60,8 +60,14 @@ public class CursoController {
     }
 
 
-    @PostMapping("/{cursoId}/associar-professor/{professorId}")
-    public ResponseEntity<ProfessorCurso> associarProfessorCurso(@PathVariable Long cursoId, @PathVariable Long professorId) {
+    @GetMapping("/meus-cursos_estudante")
+    public ResponseEntity<List<Curso>> listarMeusCursosEstudante() {
+        return ResponseEntity.ok(cursoService.listarMeusCursosEstudantes());
+    }
+
+
+    @PostMapping("/{cursoId}/associar-professor")
+    public ResponseEntity<ProfessorCurso> associarProfessorCurso(@PathVariable Long cursoId) {
         return ResponseEntity.ok(cursoService.associarProfessorCurso( cursoId));
     }
 

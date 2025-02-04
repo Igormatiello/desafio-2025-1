@@ -168,6 +168,23 @@ public class CursoServiceImpl extends CrudServiceImpl<Curso, Long>{
                 .collect(Collectors.toList());
     }
 
+    public List<Curso> listarMeusCursosEstudantes() {
+        // Obtém o usuário atual a partir do token
+        User user = userService.getUserDoToken();
+
+        // Busca a pessoa associada ao usuário no banco de dados
+        Pessoa estudante = pessoaRepository.findByUserId(user.getId());
+
+        // Se o estudante não for encontrado, pode lançar uma exceção ou retornar uma lista vazia
+        if (estudante == null) {
+            throw new RuntimeException("Estudante não encontrado para o usuário.");
+        }
+
+        // Busca os cursos associados ao estudante e retorna a lista de cursos
+        return estudanteCursoRepository.findCursosByEstudanteId(estudante.getId());
+    }
+
+
     @Override
     protected JpaRepository<Curso, Long> getRepository() {
         return repository;

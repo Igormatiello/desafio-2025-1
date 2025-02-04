@@ -43,6 +43,40 @@ export function NavBar() {
                 Cursos
               </NavLink>
             </li>
+
+            <li className="nav-item">
+              <NavLink
+                to="/cursos_livres"
+                className={(navData) =>
+                  navData.isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Cursos Disponiveis
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
+                to="/meus_cursos_professor"
+                className={(navData) =>
+                  navData.isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Meus Cursos 
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
+                to="/meus_cursos_estudante"
+                className={(navData) =>
+                  navData.isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Meus Cursos E
+              </NavLink>
+            </li>
+            
             <li className="nav-item">
               <NavLink
                 to="/cart"
