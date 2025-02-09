@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Heading, VStack, Text, Button, Spinner, Alert, AlertIcon, useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom"; // Importa o useNavigate
 import CursoService from "@/service/CursoService";
 import { ICurso } from "@/commons/interfaces";
 
@@ -8,6 +9,7 @@ const MeusCursosProfessor = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const toast = useToast();
+  const navigate = useNavigate(); // Usa o hook useNavigate
 
   const listarMeusCursos = async (): Promise<ICurso[]> => {
     try {
@@ -36,8 +38,11 @@ const MeusCursosProfessor = () => {
   const abrirTurma = (cursoId: number) => {
     window.location.href = `/alunos/${cursoId}`;
   };
-  
-  
+
+  const verAulas = (cursoId: number) => {
+    navigate(`/aulas/${cursoId}`); // Navega para a URL com o id do curso
+  };
+
   useEffect(() => {
     const fetchCursos = async () => {
       try {
@@ -69,6 +74,7 @@ const MeusCursosProfessor = () => {
               <Button mt={3} colorScheme="blue">Detalhes</Button>
               <Button mt={3} colorScheme="red" onClick={() => desassociarCurso(curso.id)}>Sair do Curso</Button>
               <Button mt={3} colorScheme="green" onClick={() => abrirTurma(curso.id)}>Abrir Turma</Button>
+              <Button mt={3} colorScheme="purple" onClick={() => verAulas(curso.id)}>Ver Aulas</Button> {/* Novo botão */}
             </Box>
           ))
         ) : (

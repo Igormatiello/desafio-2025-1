@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Importe o Link
 import CursoService from "@/service/CursoService";
 import { ICurso } from "@/commons/interfaces";
 import { Box, Text, Heading, SimpleGrid, Button, Center, useToast } from "@chakra-ui/react";
@@ -80,9 +81,12 @@ export default function CursosEstudantePage() {
                     <Button mt={2} colorScheme="blue" w="full" mb={2}>
                       Ver Notas
                     </Button>
-                    <Button mt={2} colorScheme="green" w="full">
-                      Ver Frequência
-                    </Button>
+                    {/* Link para a página de Aulas do curso */}
+                    <Link to={`/aulas_estudante/${curso.id}`}>
+                      <Button mt={2} colorScheme="green" w="full">
+                        Ver Frequência
+                      </Button>
+                    </Link>
                   </Box>
                 ) : (
                   <Button

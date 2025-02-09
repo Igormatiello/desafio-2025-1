@@ -118,7 +118,7 @@ const desassociarProfessorCurso = async (cursoId: number): Promise<boolean> => {
   }
 };
 
-const listarAlunosDoCurso = async (cursoId: number): Promise<IPessoa[]> => {
+ export const listarAlunosDoCurso = async (cursoId: number): Promise<IPessoa[]> => {
   try {
     const response = await api.get<IPessoa[]>(`/cursos/${cursoId}/alunos`, { headers: getAuthHeaders() });
     return response.data;

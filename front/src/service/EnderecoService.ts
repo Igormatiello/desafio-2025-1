@@ -1,4 +1,4 @@
-import { EnderecoDTO, PessoaEndereco } from "@/commons/interfaces";
+import { EnderecoDTO } from "@/commons/interfaces";
 import { api } from "@/lib/axios";
 
 // Função para obter os cabeçalhos de autenticação
@@ -8,20 +8,22 @@ const getAuthHeaders = () => {
 };
 
 // Função para listar todos os endereços
-const listarEnderecos = async (): Promise<PessoaEndereco[]> => {
+const listarEnderecos = async (): Promise<EnderecoDTO | null> => {
   try {
-    const response = await api.get<PessoaEndereco[]>("/pessoa/enderecos", { headers: getAuthHeaders() });
+    const response = await api.get<EnderecoDTO>("/pessoa/enderecos", { headers: getAuthHeaders() });
     return response.data;
   } catch (error) {
     console.error("Erro ao listar endereços", error);
-    return [];
+    return null;
   }
 };
 
 // Função para salvar ou editar um endereço
 const salvarOuEditarEndereco = async (enderecoDTO: EnderecoDTO): Promise<string | null> => {
   try {
-    const response = await api.post<string>("/pessoa/endereco", enderecoDTO, { headers: getAuthHeaders() });
+    const response = await api.post<string>("/pessoa/endereco", enderecoDTO, { headers: getAuthHeaders() })
+    ;
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Erro ao salvar ou editar o endereço", error);
@@ -29,22 +31,11 @@ const salvarOuEditarEndereco = async (enderecoDTO: EnderecoDTO): Promise<string 
   }
 };
 
-// Exemplo de função para listar os endereços por ID, se necessário
-const listarEnderecoPorId = async (id: number): Promise<EnderecoDTO | null> => {
-  try {
-    const response = await api.get<EnderecoDTO>(`/pessoa/enderecos/${id}`, { headers: getAuthHeaders() });
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao listar o endereço por ID", error);
-    return null;
-  }
-};
 
 // Serviço completo
 const EnderecoService = {
   listarEnderecos,
   salvarOuEditarEndereco,
-  listarEnderecoPorId,
 };
 
 export default EnderecoService;

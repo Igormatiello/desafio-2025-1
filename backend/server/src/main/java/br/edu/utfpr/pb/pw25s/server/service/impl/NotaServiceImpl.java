@@ -24,12 +24,7 @@ public class NotaServiceImpl {
         this.estudanteCursoRepository = estudanteCursoRepository;
     }
 
-    public CursoNota lancarNota(Long cursoId, Long estudanteId, Double nota) {
-        var estudanteCurso = estudanteCursoRepository.findByCursoIdAndEstudanteId(cursoId, estudanteId)
-                .orElseThrow(() -> new RuntimeException("Estudante não encontrado no curso"));
-        CursoNota cursoNota = new CursoNota(null, estudanteCurso.getCurso(), estudanteCurso, nota);
-        return cursoNotaRepository.save(cursoNota);
-    }
+
 
     public List<CursoNota> listarNotasAluno(Long cursoId, Long estudanteId) {
         return cursoNotaRepository.findByEstudanteIdAndCursoId(cursoId, estudanteId);

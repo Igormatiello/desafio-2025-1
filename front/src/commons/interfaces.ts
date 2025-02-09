@@ -67,3 +67,29 @@ export interface PessoaEndereco{
   pessoa: IPessoa;
 }
 
+export interface ICursoAula {
+  id: number;
+  cursoId: number;
+  titulo: string;
+  descricao?: string;
+  data: string; // Mantemos como string no formato "YYYY-MM-DD"
+}
+
+
+export interface ICursoPresenca {
+  id: number;
+  estudanteId: number;
+  aulaId: number;
+  presente: boolean;
+  dataRegistro: string; // formato ISO 8601
+}
+
+export interface IEstudanteCurso {
+  id: number;
+  estudanteId: number;
+  cursoId: number;
+  dataInicio: string;
+  dataFim?: string; // pode ser undefined se o curso ainda estiver em andamento
+  status: "ativo" | "concluido" | "cancelado";
+}
+

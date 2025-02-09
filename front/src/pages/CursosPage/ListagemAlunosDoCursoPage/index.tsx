@@ -8,7 +8,7 @@ const MeusAlunosCursosProfessor = () => {
   const { id } = useParams<{ id?: string }>(); // Permitir que id seja undefined
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [alunos, setAlunos] = useState<IPessoa[] | null>(null);
+  const [alunos, setAlunos] = useState<IPessoa[]>([]);
   const toast = useToast();
 
   useEffect(() => {
@@ -18,10 +18,10 @@ const MeusAlunosCursosProfessor = () => {
         setLoading(false);
         return;
       }
-
+  
       try {
         const alunosList = await CursoService.listarAlunosDoCurso(Number(id));
-        setAlunos(alunosList);
+        setAlunos(Array.isArray(alunosList) ? alunosList : []); // Garante que será um array
       } catch (error) {
         setError("Erro ao carregar alunos do curso.");
         toast({
@@ -34,10 +34,9 @@ const MeusAlunosCursosProfessor = () => {
         setLoading(false);
       }
     };
-
+  
     fetchCurso();
-  }, [id]); // Removido `toast` da lista de dependências
-
+  }, [id]);
   return (
     <Box p={5} maxW="800px" mx="auto">
       <Heading mb={5} textAlign="center">Alunos do Curso</Heading>

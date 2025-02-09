@@ -6,25 +6,29 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "curso_presenca")
+@Table(name = "curso_aula")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CursoPresenca {
+public class CursoAula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "curso_aula_id", nullable = false)
-    private CursoAula cursoAula;
-
-    @ManyToOne
-    @JoinColumn(name = "estudante_curso_id", nullable = false)
-    private EstudanteCurso estudante;
+    @JoinColumn(name = "curso_id", nullable = false)
+    private Curso curso;
 
     @Column(nullable = false)
     private Date data;
+
+    @Column(nullable = false)
+    private String titulo;
+
+    @Column(nullable = false)
+    private String descricao;
+
+
 }

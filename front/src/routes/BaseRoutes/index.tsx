@@ -10,6 +10,8 @@ import CursosEstudantePage from "@/pages/CursosPage/ListagemCursosEstudantePage"
 import MeusAlunosCursosProfessor from "@/pages/CursosPage/ListagemAlunosDoCursoPage";
 import MeusDadosUsuario from "@/pages/MeusDadosPage/DadosDeUserPessoaPage";
 import MeusEnderecos from "@/pages/MeusDadosPage/MeuEnderecoPage";
+import CursoAulasPage from "@/pages/PresencaPage/ListagemAulasDoCursoPage";
+import AlunoAulasPage from "@/pages/PresencaPage/ListagemAulasProAlunoPage";
 
 export function BaseRoutes() {
   return (
@@ -20,7 +22,7 @@ export function BaseRoutes() {
 
       {/* Private Routes */}
       <Route element={<AuthenticatedRoutes />}>
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/cursos" element={<CursosPage />} />
         <Route path="/cursos_livres" element={<ListagemCursosSemProfessor />} />
         <Route path="/meus_cursos_professor" element={<MeusCursosProfessor />} />
@@ -28,11 +30,8 @@ export function BaseRoutes() {
         <Route path="/alunos/:id" element={<MeusAlunosCursosProfessor />} />
         <Route path="/meus_dados" element={<MeusDadosUsuario />} />
         <Route path="/endereco" element={<MeusEnderecos />} />
-
-
-        
-
-
+        <Route path="/aulas/:id" element={<CursoAulasPage />} />
+        <Route path="/aulas_estudante/:id" element={<AlunoAulasPage />} />
       </Route>
     </Routes>
   );

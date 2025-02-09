@@ -15,5 +15,6 @@ public interface CursoNotaRepository extends JpaRepository<CursoNota, Long> {
     // Busca uma nota específica por estudante e curso (para edições)
     Optional<CursoNota> findByEstudanteIdAndCursoIdAndId(Long estudanteId, Long cursoId, Long notaId);
 
+    List<CursoNota> findByEstudanteId(Long estudanteId);
 
 }
